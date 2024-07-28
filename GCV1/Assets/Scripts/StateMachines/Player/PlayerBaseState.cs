@@ -16,9 +16,14 @@ public abstract class PlayerBaseState : State
         stateMachine.Controller.Move((motion + stateMachine.ForceReciever.Movement) * deltaTime);
     }
 
+    protected void Move(float deltaTime)
+    {
+        Move(Vector3.zero, deltaTime);
+    }
+
     protected void FaceTarget()
     {
-        if(stateMachine.Targeter.CurrentTarget == null) { return; }
+        if (stateMachine.Targeter.CurrentTarget == null) { return; }
 
         Vector3 lookPosition = stateMachine.Targeter.CurrentTarget.transform.position - stateMachine.transform.position;
         lookPosition.y = 0f;
@@ -26,8 +31,15 @@ public abstract class PlayerBaseState : State
         stateMachine.transform.rotation = Quaternion.LookRotation(lookPosition);
     }
 
-    protected void Move(float deltaTime)
+    protected void ReturnToLocomotion()
     {
-        Move(Vector3.zero, deltaTime);
+        if(stateMachine.Targeter.CurrentTarget !=  null)
+        {
+            stateMachine.SwitchState(new PlayerTargetingState(stateMachine));
+        }
+        else
+        {
+            stateMachine.SwitchState(new PlayerFreeLookState(stateMachine));
+        }
     }
 }
