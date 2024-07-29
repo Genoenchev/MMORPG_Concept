@@ -7,7 +7,8 @@ public class Health : MonoBehaviour
 {
     [SerializeField] private int maxHealth = 100;
 
-    private int health;
+    public int health;
+    public bool IsDead => health == 0;
 
     public event Action OnTakeDamage;
     public event Action OnDie;
